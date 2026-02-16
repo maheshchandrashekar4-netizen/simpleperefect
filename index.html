@@ -1,61 +1,52 @@
-1<!DOCTYPE html>
-2
-3<html lang="en">
-4  <head>
-5    <meta charset="utf-8" />
-6    <title>Custom Journey Builder Activity</title>
-7
-8    <script type="text/javascript" src="js/jquery.min.js"></script>
-9    <script type="text/javascript" src="js/require.js"></script>
-10    <script type="text/javascript">
-11      (function () {
-12        var config = {
-13          baseUrl: "",
-14        };
-15
-16        var dependencies = ["customActivity"];
-17
-18        require(config, dependencies);
-19      })();
-20    </script>
-21
-22    <!--Styles-->
-23    <style type="text/css">
-24      body {
-25        padding: 20px;
-26        margin: 0;
-27      }
-28      .step {
-29        display: none;
-30      }
-31      #step1 {
-32        display: block;
-33      }
-34    </style>
-35  </head>
-36  <body>
-37    <div id="step1" class="step">
-38      Select your SMS message:
-39      <select id="select1">
-40        <option value="">Select an option</option>
-41        <option value="someMessage">Some SMS</option>
-42        <option value="anotherMessage">Another SMS</option>
-43        <option value="thirdMessage">Third SMS</option>
-44        <option value="unknownMessage">Unknown SMS</option>
-45      </select>
-46
-47      <button id="toggleLastStep">Toggle Last Step</button>
-48    </div>
-49    <div id="step2" class="step">
-50      Here's a second page with some info on it.
-51    </div>
-52    <div id="step3" class="step">
-53      You chose the message:
-54      <div id="message"></div>
-55    </div>
-56    <div id="step4" class="step">
-57      Hey, here's a fourth step, just for you. Toggle this on or off from step
-58      1.
-59    </div>
-60  </body>
-61</html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Hello JB</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/postmonger/0.0.14/postmonger.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 16px; }
+    h2 { margin: 0 0 8px; font-size: 18px; }
+    p { margin: 0 0 10px; color: #333; }
+    .box { padding: 12px; border: 1px solid #ddd; border-radius: 10px; }
+    .small { font-size: 12px; color: #666; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>✅ Hello from Journey Builder</h2>
+    <p>If you can see this screen, your custom activity UI is loading correctly.</p>
+    <div class="small" id="status">Waiting for Journey Builder…</div>
+  </div>
+
+  <script>
+    // Minimal Journey Builder handshake
+    const connection = new Postmonger.Session();
+    let payload = {};
+
+    connection.on("initActivity", (data) => {
+      payload = data || {};
+      document.getElementById("status").textContent = "Connected to Journey Builder ✅";
+
+      // Enable Next/Done so you can exit the modal
+      connection.trigger("updateButton", { button: "next", enabled: true });
+    });
+
+    connection.on("clickedNext", () => {
+      payload.metaData = payload.metaData || {};
+      payload.metaData.isConfigured = true;
+      payload.name = "Hello JB";
+
+      // Save something tiny into the activity payload
+      payload.arguments = payload.arguments || {};
+      payload.arguments.execute = payload.arguments.execute || {};
+      payload.arguments.execute.inArguments = [{ hello: "world" }];
+
+      connection.trigger("updateActivity", payload);
+    });
+
+    // Tell JB we are ready (JB will respond with initActivity)
+    connection.trigger("ready");
+  </script>
+</body>
+</html>
