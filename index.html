@@ -1,0 +1,61 @@
+1<!DOCTYPE html>
+2
+3<html lang="en">
+4  <head>
+5    <meta charset="utf-8" />
+6    <title>Custom Journey Builder Activity</title>
+7
+8    <script type="text/javascript" src="js/jquery.min.js"></script>
+9    <script type="text/javascript" src="js/require.js"></script>
+10    <script type="text/javascript">
+11      (function () {
+12        var config = {
+13          baseUrl: "",
+14        };
+15
+16        var dependencies = ["customActivity"];
+17
+18        require(config, dependencies);
+19      })();
+20    </script>
+21
+22    <!--Styles-->
+23    <style type="text/css">
+24      body {
+25        padding: 20px;
+26        margin: 0;
+27      }
+28      .step {
+29        display: none;
+30      }
+31      #step1 {
+32        display: block;
+33      }
+34    </style>
+35  </head>
+36  <body>
+37    <div id="step1" class="step">
+38      Select your SMS message:
+39      <select id="select1">
+40        <option value="">Select an option</option>
+41        <option value="someMessage">Some SMS</option>
+42        <option value="anotherMessage">Another SMS</option>
+43        <option value="thirdMessage">Third SMS</option>
+44        <option value="unknownMessage">Unknown SMS</option>
+45      </select>
+46
+47      <button id="toggleLastStep">Toggle Last Step</button>
+48    </div>
+49    <div id="step2" class="step">
+50      Here's a second page with some info on it.
+51    </div>
+52    <div id="step3" class="step">
+53      You chose the message:
+54      <div id="message"></div>
+55    </div>
+56    <div id="step4" class="step">
+57      Hey, here's a fourth step, just for you. Toggle this on or off from step
+58      1.
+59    </div>
+60  </body>
+61</html>
